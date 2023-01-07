@@ -6,6 +6,7 @@ import {
   getAllData,
   // getData,
   postNewData,
+  getUserPosts,
   updateData,
   deleteData,
 } from "../../controllers/dataController";
@@ -14,10 +15,9 @@ export const dataRoute = express.Router();
 
 dataRoute
   .route("/")
-  .get(verify, getAllData)
-  // .get(getAllData)
-  .post(authRoles(["NUser"]), postNewData)
-  .put(updateData)
-  .delete(deleteData);
+  .get(getAllData)
+  .post(verify, authRoles(["NUser"]), postNewData)
+  .put(verify, authRoles(["NUser"]), updateData)
+  .delete(authRoles(["NUser"]), deleteData);
 
-// dataRoute.route("/:id").get(getData);
+dataRoute.route("/userposts").post(verify, getUserPosts);

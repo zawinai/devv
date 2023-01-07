@@ -12,4 +12,5 @@ export const corOPtions = {
     }
   },
   optionSuccessStatus: 200,
+  credentials: true,
 };

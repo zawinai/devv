@@ -3,13 +3,15 @@ import express, { Express } from "express";
 import {
   registerHandler,
   loginHandler,
+  refreshTokenHandler,
   logoutHandler,
 } from "../../controllers/userControllers";
 
 const authRoute = express.Router();
 
-authRoute.route("/").post(registerHandler);
+authRoute.route("/register").post(registerHandler);
 authRoute.route("/login").post(loginHandler);
-authRoute.route("/logout").get(logoutHandler);
+authRoute.route("/refresh").get(refreshTokenHandler);
+authRoute.route("/logout").post(logoutHandler);
 
 export default authRoute;

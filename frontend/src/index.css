@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'Futurist' ;
+    src: url('/fonts/Futurist-Fixed-width.woff2') format('woff2');
+    font-weight : 400;
+    font-display : swap;
+    font-style : normal
+  }
+@font-face {
+    font-family: 'Roboto' ;
+    src: url('/fonts/Roboto-Regular.woff2') format('woff2');
+    font-weight : 400;
+    font-display : swap;
+    font-style : normal
+  }
+@font-face {
+    font-family: 'Tesla' ;
+    src: url('/fonts/TESLA.woff2') format('woff2');
+    font-weight : 400;
+    font-display : swap;
+    font-style : normal
+  }

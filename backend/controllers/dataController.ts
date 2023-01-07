@@ -1,13 +1,30 @@
 import { Request, Response, NextFunction } from "express";
 import Data from "../models/data";
+import bc from "bcrypt";
 
 export const getAllData = async (req: Request, res: Response) => {
-  const data = await Data.find({ user: req.id });
+  // const data = await Data.find({ user: req.id });
+
+  const data = await Data.find();
 
   if (!data) {
     return res.status(204).json({ message: "No Data" });
   } else {
     return res.json(data);
+  }
+};
+
+export const getUserPosts = async (req: Request, res: Response) => {
+  if (!req.body.id || req.id) {
+    return res.status(403).json({ message: "Id is required!" });
+  } else {
+    const id = bc.compare(req.body.id, req.id);
+    const userPosts = await Data.find({ user: id });
+    if (!userPosts) {
+      return res.status(204).json({ message: "No Data" });
+    } else {
+      return res.json(userPosts);
+    }
   }
 };
 
@@ -40,7 +57,7 @@ export const postNewData = async (req: Request, res: Response) => {
 
     res.status(201).json({ message: `New Data ${req.body.title} Is Created.` });
   } catch (e) {
-    console.log(e);
+    throw new Error(e as string);
   }
 };
 
@@ -85,7 +102,7 @@ export const deleteData = async (req: Request, res: Response) => {
         "This data is yours So you aren't allowed to modify or delete it",
     });
   } else {
-    const result = await findData.deleteOne({ _id: req.body.id });
+    await findData.deleteOne({ _id: req.body.id });
 
     return res.json({ message: `${req.body.id} Has Been Deleted!` });
   }

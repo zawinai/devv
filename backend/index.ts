@@ -1,16 +1,18 @@
 import express, { Express, Request, Response } from "express";
 const app: Express = express();
 import mongoose from "mongoose";
-import fs, { existsSync } from "fs";
 
 require("dotenv").config();
 const PORT = process.env.PORT || 3000;
 
 // middlewares
-import { logger } from "./middlewares/eventLogger";
+import { errorlogger } from "./middlewares/errorHandler";
+import { reqlogger } from "./middlewares/reqLogger";
+
 // routes
 import { dataRoute } from "./routes/api/data";
 import authRoute from "./routes/api/auth";
+
 // DB
 import { ConnectDB } from "./config/dbConnect";
 // auth
@@ -19,24 +21,20 @@ import { verify } from "./middlewares/verifyJWT";
 import { credentials } from "./middlewares/credentials";
 import { corOPtions } from "./config/corsOpts";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 ConnectDB();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-console.log(process.env.WHITE_LIST);
-
 app.use(credentials);
 app.use(cors(corOPtions));
+app.use(cookieParser("auth"));
 
-app.use((req, res, next) => {
-  logger(`${req.method} \t ${req.path}`, "request.txt");
-  next();
-});
+app.use(reqlogger);
 
 app.use("/auth", authRoute);
-app.use(verify);
 app.use("/data", dataRoute);
 
 app.all("*", (req: Request, res: Response) => {
@@ -51,6 +49,8 @@ app.all("*", (req: Request, res: Response) => {
     }
   }
 });
+
+app.use(errorlogger);
 
 mongoose.connection.once("open", () => {
   console.log("Connected to Database Successfully!");
