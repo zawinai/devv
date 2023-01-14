@@ -6,6 +6,7 @@ const SideProfile = () => {
   const {
     auth: { avatar, username },
   } = useCT();
+
   return (
     <div
       className={classNames(
@@ -19,7 +20,7 @@ const SideProfile = () => {
           username ? "flex" : "hidden"
         )}
       >
-        <div className=' mx-auto bg-slate-200'>
+        <div className=' mx-auto bg-slate-700'>
           <img
             className='w-32 mx-auto rounded-full -mt-20 border-8 border-white bg-slate-400'
             src={avatar}

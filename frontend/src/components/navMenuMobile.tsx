@@ -20,7 +20,7 @@ const NavMenuMobile = () => {
       ];
 
   return (
-    <Disclosure as='nav' className=''>
+    <Disclosure as='nav' className='hidden'>
       {({ open }: any) => (
         <>
           <div className='ml-[80%] max-w-7xl px-4 sm:px-6 lg:px-8'>

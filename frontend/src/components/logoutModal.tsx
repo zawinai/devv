@@ -2,8 +2,8 @@ import React, { Fragment, SetStateAction, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useLogout } from "../hooks/useLogout";
-import { useCT } from "../hooks/useCT";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 type modalProps = {
   open: boolean;
@@ -11,7 +11,8 @@ type modalProps = {
 };
 
 const LogoutModal = ({ open, setOpen }: modalProps) => {
-  const { auth } = useCT();
+
+  const navigate = useNavigate()
 
   const logout = useLogout();
 
@@ -20,7 +21,7 @@ const LogoutModal = ({ open, setOpen }: modalProps) => {
 
     setOpen(false);
 
-    redirect("/");
+    navigate("/");
   };
 
   const cancelButtonRef = useRef(null);

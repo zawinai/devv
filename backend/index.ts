@@ -10,13 +10,13 @@ import { errorlogger } from "./middlewares/errorHandler";
 import { reqlogger } from "./middlewares/reqLogger";
 
 // routes
-import { dataRoute } from "./routes/api/data";
+import { dataRoute } from "./routes/api/post";
 import authRoute from "./routes/api/auth";
-
+import { userRoute } from "./routes/api/user";
 // DB
 import { ConnectDB } from "./config/dbConnect";
 // auth
-import { verify } from "./middlewares/verifyJWT";
+
 //Cors
 import { credentials } from "./middlewares/credentials";
 import { corOPtions } from "./config/corsOpts";
@@ -34,8 +34,9 @@ app.use(cookieParser("auth"));
 
 app.use(reqlogger);
 
+app.use("/user", userRoute);
 app.use("/auth", authRoute);
-app.use("/data", dataRoute);
+app.use("/post", dataRoute);
 
 app.all("*", (req: Request, res: Response) => {
   res.status(404);

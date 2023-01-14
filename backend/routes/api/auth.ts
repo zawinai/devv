@@ -5,7 +5,7 @@ import {
   loginHandler,
   refreshTokenHandler,
   logoutHandler,
-} from "../../controllers/userControllers";
+} from "../../controllers/authControllers";
 
 const authRoute = express.Router();
 

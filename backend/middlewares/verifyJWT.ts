@@ -1,5 +1,6 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
+import bc from "bcrypt";
 
 export const verify = async (
   req: Request,

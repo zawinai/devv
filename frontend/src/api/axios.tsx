@@ -1,5 +1,6 @@
 import axios from "axios";
-const baseURL = "http://localhost:3000/";
+const baseURL = "http://localhost:3000/"; //.env not working
+
 
 export default axios.create({
   baseURL: baseURL,

@@ -65,7 +65,7 @@ export default function Register() {
   // useEffect(() => {}, [username, pwd, matchPwd]);
 
   const fields = {
-    question: "Already Have an account",
+    question: "Already Have an account?",
     button: "Sign Up",
     link: "/login",
   };
@@ -102,13 +102,18 @@ export default function Register() {
   };
 
   return (
-    <div className='min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
-      <div className='w-full max-w-md space-y-8'>
-        <h2 className='mt-6 text-center text-2xl font-bold tracking-tight text-gray-900 '>
+    <div className='bg-slate-900 min-h-screen w-full py-12 px-4 sm:px-6 lg:px-8 overflow-scroll md:overflow-hidden'>
+      <div className='max-w-[600px] w-full space-y-8 bg-white p-7 md:p-10 mx-auto '>
+        <Link to='/' className="">
+          <h1 className=' text-lg sm:text-3xl md:text-5xl text-center font-Tesla font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-sky-800'>
+            devv
+          </h1>
+        </Link>
+        <h2 className='mt-6 text-center text-lg sm:text-xl md:text-3xl font-bold tracking-tight text-gray-900 '>
           {msg}
         </h2>
         {success ? (
-          <div className='flex flex-row items-center justify-center gap-3'>
+          <div className='flex flex-row items-center justify-center gap-3 text-gray-900'>
             <Link to='/login'>You can Sign in to your account</Link>
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -145,13 +150,13 @@ export default function Register() {
           <span aria-label='percent'>%</span>
         </p>
         <form
-          className='mt-8 space-y-6'
+          className='mt-8 space-y-6 w-full sm:max-w-[300px] md:max-w-[400px] mx-auto '
           action='#'
           method='POST'
           onSubmit={(e) => handleSubmit(e)}
         >
           <div className='-space-y-px rounded-md shadow-sm '>
-            <div className='relative w-full appearance-none rounded-none rounded-b-md sm:text-sm flex flex-row  items-center '>
+            <div className='relative w-full appearance-none rounded-none rounded-b-md sm:text-sm md:text-lg flex flex-row  items-center '>
               <label htmlFor='fullname' className='sr-only'>
                 Name
               </label>
@@ -161,7 +166,7 @@ export default function Register() {
                 value={username}
                 autoComplete='off'
                 type='text'
-                className='z-0 relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
+                className='z-0 relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 text-sm md:text-md'
                 placeholder='Fullname'
                 required={true}
                 ref={usernameRef}
@@ -178,7 +183,7 @@ export default function Register() {
                 A unique short username
               </p>
             </div>
-            <div className='relative w-full appearance-none rounded-none rounded-b-md sm:text-sm flex flex-row  items-center '>
+            <div className='relative w-full appearance-none rounded-none rounded-b-md text-sm sm:text-md flex flex-row  items-center '>
               <label htmlFor='email' className='sr-only'>
                 Email address
               </label>
@@ -190,7 +195,7 @@ export default function Register() {
                 required={true}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className='z-0 relative block w-full appearance-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
+                className='z-0 relative block w-full appearance-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 text-sm sm:text-md '
                 placeholder='Email address'
                 onFocus={() => setEmailFocus(true)}
                 onBlur={() => setEmailFocus(false)}
@@ -215,7 +220,7 @@ export default function Register() {
                 autoComplete='current-password'
                 required={true}
                 value={pwd}
-                className='block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm z-0'
+                className='block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 text-sm sm:text-md  z-0'
                 placeholder='Password'
                 onFocus={() => setPwdFocus(true)}
                 onBlur={() => setPwdFocus(false)}
@@ -227,7 +232,7 @@ export default function Register() {
                 fill='none'
                 viewBox='0 0 24 24'
                 strokeWidth={1.5}
-                stroke='currentColor'
+                stroke='black'
                 className='w-6 h-6 mr-3 cursor-pointer absolute right-0 z-20'
                 onClick={() => setShow(!show)}
               >
@@ -263,7 +268,7 @@ export default function Register() {
                 type={!show ? "password" : "text"}
                 autoComplete='current-password'
                 required={true}
-                className='block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm z-0'
+                className='block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 text-sm sm:text-md z-0'
                 placeholder='Type password again'
                 onFocus={() => setMatchFocus(true)}
                 onBlur={() => setMatchFocus(false)}
@@ -281,15 +286,15 @@ export default function Register() {
 
           <Link
             to={fields.link}
-            className='font-medium text-indigo-600 hover:text-indigo-500 '
+            className='text-sm md:text-lg text-indigo-600 hover:text-indigo-500 '
           >
-            <h3 className='text-end py-5'>{fields.question}</h3>
+            <h3 className=' text-center md:text-end py-5'>{fields.question}</h3>
           </Link>
 
           <div>
             <button
               type='submit'
-              className='group relative flex w-full justify-center rounded-md border border-transparent text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-blue-500/50 font-medium  text-sm px-5 py-2.5 text-center mr-2 mb-2 '
+              className='group relative flex w-full justify-center rounded-md border border-transparent text-gray-200 font-bold bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-blue-500/50 text-sm px-5 py-2.5 text-center mr-2 mb-2 '
               disabled={!validName || !validPwd || !validMatch ? true : false}
             >
               {!validName || !validPwd || !validMatch ? (

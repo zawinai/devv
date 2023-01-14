@@ -3,20 +3,24 @@ import axios from "../api/axios";
 import { useCT } from "./useCT";
 import { createAvatar } from "@dicebear/avatars";
 import * as style from "@dicebear/adventurer";
+import { useAxios } from "./useAxios";
 
 export const useRefreshToken = () => {
-  const { auth, dispatch } = useCT();
-  const [avatarName, setAvatarName] = useState("");
+  // const axiosPrivate = useAxios();
 
-  const avatar = useMemo(() => {
-    return createAvatar(style, { seed: avatarName, dataUri: true, size: 128 });
-  }, []);
+  const { auth, dispatch } = useCT();
 
   const refresh = async () => {
     const res = await axios.get("http://localhost:3000/auth/refresh", {
       withCredentials: true,
     });
-    console.log("refresh hook", res);
+
+    const avatar = createAvatar(style, {
+      seed: res.data.username,
+      dataUri: true,
+      size: 128,
+    });
+
     dispatch({
       type: "setAuth",
       payload: {
@@ -27,8 +31,6 @@ export const useRefreshToken = () => {
         avatar: avatar,
       },
     });
-
-    setAvatarName(res.data.username);
   };
 
   return refresh;

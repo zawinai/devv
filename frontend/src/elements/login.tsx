@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { FormEvent, useRef } from "react";
-import { Link, redirect, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useCT } from "../hooks/useCT";
 import { useLogin } from "../hooks/useLogin";
-import { useRefreshToken } from "../hooks/useRefresh";
 
 export default function Login() {
   const { remember, dispatch } = useCT();
@@ -20,8 +19,6 @@ export default function Login() {
   const [show, setShow] = useState(false);
 
   const { login } = useLogin();
-
-  const refresh = useRefreshToken();
 
   const navigate = useNavigate();
 
@@ -58,13 +55,18 @@ export default function Login() {
   };
 
   return (
-    <div className='min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
-      <div className='w-full max-w-md space-y-12'>
-        <h2 className='mt-6 text-center text-3xl font-bold tracking-tight text-gray-900'>
+    <div className='min-h-screen overflow-scroll md:overflow-hidden'>
+      <div className='max-w-[600px] mx-auto my-[10%] bg-slate-200 py-10 px-4 sm:px-6 lg:px-8 '>
+        <Link to='/'>
+          <h1 className='text-xl text-center font-Tesla font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-sky-800'>
+            devv
+          </h1>
+        </Link>
+        <h2 className='mt-6 text-center text-lg sm:text-xl md:text-3xl font-bold tracking-tight text-gray-900'>
           {title}
         </h2>
         <form
-          className='mt-8 space-y-6'
+          className='mt-8 space-y-6 w-full sm:max-w-[300px] md:max-w-[400px] mx-auto'
           action='#'
           method='POST'
           onSubmit={(e) => handleSubmit(e)}
@@ -80,7 +82,7 @@ export default function Login() {
                 type='text'
                 required={true}
                 value={email}
-                className='relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
+                className='relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 text-sm sm:text-md'
                 placeholder='Email address'
                 ref={emailRef}
                 onChange={(e) => setEmail(e.target.value)}
@@ -96,7 +98,7 @@ export default function Login() {
                 type={!show ? "password" : "text"}
                 required={true}
                 value={password}
-                className='relative w-full rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm z-0'
+                className='relative w-full rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 text-sm sm:text-md z-0'
                 placeholder='Password'
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -105,7 +107,7 @@ export default function Login() {
                 fill='none'
                 viewBox='0 0 24 24'
                 strokeWidth={1.5}
-                stroke='currentColor'
+                stroke='black'
                 className='w-6 h-6 mr-3 cursor-pointer absolute right-0 top-2 z-20'
                 onClick={() => setShow(!show)}
               >
@@ -142,12 +144,17 @@ export default function Login() {
                   dispatch({ type: "setRemember", payload: !remember })
                 }
               />
-              <label htmlFor='remember'>Keep me logged in</label>
+              <label
+                htmlFor='remember'
+                className='text-xs sm:text-sm md:text-md text-slate-700'
+              >
+                Keep me logged in
+              </label>
             </div>
 
             <Link
               to={fields.link}
-              className='font-medium text-indigo-600 hover:text-indigo-500'
+              className='text-xs sm:text-sm md:text-lg text-indigo-600 hover:text-indigo-500'
             >
               {fields.question}
             </Link>
@@ -156,7 +163,7 @@ export default function Login() {
           <div>
             <button
               type='submit'
-              className='group relative flex w-full justify-center rounded-md border border-transparent text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-blue-500/50 font-medium  text-sm px-5 py-2.5 text-center mr-2 mb-2 '
+              className='group relative flex w-full justify-center rounded-md border border-transparent text-white font-bold bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-blue-500/50 text-sm px-5 py-2.5 text-center mr-2 mb-2 '
             >
               {fields.button}
             </button>

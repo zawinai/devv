@@ -1,66 +1,87 @@
-import { useEffect } from "react";
 // Utils
 import { classNames } from "../utils/changeStyle";
-import { Link } from "react-router-dom";
 
 // Components
-import Hero from "../components/hero";
 import SideProfile from "../components/sideProfile";
 import Card from "../components/card";
 import NavMenuMobile from "../components/navMenuMobile";
 import { SkeletonPost } from "../components/loading";
+import Hero from "../components/hero";
+
 // Hooks
 import { useCT } from "../hooks/useCT";
-import { useRefreshToken } from "../hooks/useRefresh";
+import { useState } from "react";
+// Api
+import { getData } from "../api/post";
+import { useQuery } from "react-query";
 
 export default function Home() {
   const {
-    auth: { username, accessToken },
-    posts,
-    remember,
+    auth: { username },
   } = useCT();
 
+  type postTypes = {
+    _id: string;
+    postusername: string;
+    user: string;
+    slug: string;
+    title: string;
+    body: string;
+  };
+
+  const { isLoading, isError, data } = useQuery("posts", getData);
+
   return (
-    <div className='min-h-full'>
-      <Hero />
+    <div className='bg-black min-w-[100vw] max-w-[1500px] mx-auto'>
       <NavMenuMobile />
-      <main className='grid p-4 grid-cols-1 md:grid-cols-7 min-h-screen'>
-        <div
-          className={classNames(
-            "p-2 grid grid-cols-card-container gap-4  place-items-center",
-            username ? "col-span-5" : "col-span-8"
-          )}
-        >
-          {posts.length <= 1
-            ? [1, 2, 3, 4, 5, 6, 7].map((_) => <SkeletonPost key={_} />)
-            : posts.map((post) => (
-                <div key={post._id}>
-                  <Card />
-                </div>
-              ))}
+      <div>
+        <Hero data={data} />
+      </div>
+      <main
+        className={classNames(
+          "",
+          !isError && Array.isArray(data)
+            ? "grid p-4 pt-10 grid-cols-1 md:grid-cols-7 min-h-screen"
+            : "flex flex-col w-[100vw] min-h-screen items-center justify-center"
+        )}
+      >
+        {isLoading ? (
           <div
             className={classNames(
-              "flex flex-row gap-3 border border-slate-300 p-3 rounded-xl hover:scale-95",
-              !username && posts.length <= 1 ? "hidden" : "flex"
+              "grid grid-cols-1 gap-5 place-items-center",
+              username ? "col-span-5" : "col-span-8"
             )}
           >
-            <Link to='/login'>Login To Read More</Link>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth={1.5}
-              stroke='currentColor'
-              className='w-26 h-6 '
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3'
-              />
-            </svg>
+            {[1, 2, 3, 4, 5, 6, 7].map((_) => (
+              <SkeletonPost key={_} />
+            ))}
           </div>
-        </div>
+        ) : isError || (typeof data === "object" && !Array.isArray(data)) ? (
+          <h1 className='text-center text-sm sm:text-xl md:text-5xl text-red-500/80 font-Futurist overflow-hidden'>
+            Network Error {":("}
+          </h1>
+        ) : (
+          <div
+            className={classNames(
+              " grid grid-cols-1 gap-5 place-items-center mx-autop-5",
+              username ? "col-span-5" : "col-span-8"
+            )}
+          >
+            {Array.isArray(data) &&
+              data.map(
+                ({ _id, slug, user, title, postusername }: postTypes) => (
+                  <div key={_id}>
+                    <Card
+                      slug={slug}
+                      user={user}
+                      title={title}
+                      postusername={postusername}
+                    />
+                  </div>
+                )
+              )}
+          </div>
+        )}
         <SideProfile />
       </main>
     </div>

@@ -8,7 +8,10 @@ const PersitToken = () => {
 
   const refresh = useRefreshToken();
 
-  const { remember } = useCT();
+  const {
+    remember,
+    auth: { accessToken },
+  } = useCT();
 
   useEffect(() => {
     const refreshToken = async () => {
@@ -21,9 +24,10 @@ const PersitToken = () => {
       }
     };
 
-    if (remember) {
+    if (remember && !accessToken) {
       refreshToken();
     }
+    setLoading(false);
   }, []);
 
   return <>{!remember ? <Outlet /> : loading ? <Loading /> : <Outlet />}</>;

@@ -2,20 +2,20 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const dataSchema = new Schema({
+const profileSchema = new Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "User",
   },
-  title: {
+  summary: {
+    required: true,
+  },
+  devtype: {
     type: String,
     required: true,
   },
-  body: {
-    type: String,
-    required: true,
-  },
+  languages: [String],
 });
 
-export default mongoose.model("Data", dataSchema); // Collection name
+export default mongoose.model("Profile", profileSchema);

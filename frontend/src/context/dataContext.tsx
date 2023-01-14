@@ -1,16 +1,12 @@
-import React, {
-  createContext,
-  useCallback,
-  useEffect,
-  ReactNode,
-  useReducer,
-} from "react";
+import React, { createContext, useEffect, ReactNode, useReducer } from "react";
 import { useQuery } from "react-query";
-import { getData } from "../api/data";
+import { getData } from "../api/post";
 
 type postTypes = {
   _id: string;
+  postusername: string;
   user: string;
+  slug: string;
   title: string;
   body: string;
 };
@@ -20,11 +16,13 @@ type authTypes = {
   username?: string;
   accessToken?: string;
   avatar?: string;
+  authUserPosts?: postTypes[];
 };
 
 const initialStates: {
   auth: authTypes;
   posts: postTypes[];
+  authUserPosts?: postTypes[];
   userPosts: postTypes[];
   remember: boolean;
 } = {
@@ -39,7 +37,6 @@ export type actionTypes =
   | { type: "setRemember"; payload: boolean }
   | { type: "setPosts"; payload: postTypes[] }
   | { type: "setUserPosts"; payload: postTypes[] };
-
 const reducer = (state: typeof initialStates, action: actionTypes) => {
   const { type, payload } = action;
   switch (type) {
@@ -73,33 +70,30 @@ export const DataContext = createContext<{
 export const ContextProvider = ({ children }: ContextProviderProps) => {
   const [state, dispatch] = useReducer(reducer, initialStates);
 
-  const {
-    isLoading,
-    isError,
-    error,
-    data: postList,
-  } = useQuery("posts", getData);
+  // const {
+  //   isLoading,
+  //   isError,
+  //   error,
+  //   data: postList,
+  // } = useQuery("posts", getData);
 
-  let content: any;
-  if (isLoading) {
-    content = [];
-  } else if (isError) {
-    content = error;
-  } else {
-    content = postList;
-  }
-  const setPosts = useCallback(
-    () => dispatch({ type: "setPosts", payload: content }),
-    [postList]
-  );
+  // let content: any;
+  // if (isLoading) {
+  //   content = [];
+  // } else if (isError) {
+  //   content = error;
+  // } else {
+  //   content = postList;
+  // }
+  // const setPosts = () => dispatch({ type: "setPosts", payload: content });
 
-  useEffect(() => {
-    if (!isLoading || !isError) {
-      setPosts();
-    } else {
-      console.log(error);
-    }
-  }, [postList]);
+  // useEffect(() => {
+  //   if (!isLoading || !isError) {
+  //     setPosts();
+  //   } else {
+  //     console.log(error);
+  //   }
+  // }, [postList]);
 
   return (
     <DataContext.Provider value={{ state, dispatch }}>

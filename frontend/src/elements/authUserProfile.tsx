@@ -5,20 +5,50 @@ import { useCT } from "../hooks/useCT";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useLogout } from "../hooks/useLogout";
+import { useAuthPosts } from "../hooks/useAuthUserPosts";
+import { useAxios } from "../hooks/useAxios";
 
-const Profile = () => {
-  const logout = useLogout();
+const AuthUserProfile = () => {
+  const {
+    auth: { authUserPosts },
+    dispatch,
+  } = useCT();
 
-  const menuItems = [
-    {
-      menuName: "Home",
-      link: "/",
-    },
-    {
-      menuName: "New Post",
-      link: "/post",
-    },
-  ];
+  type postListProps = {
+    _id: string;
+    user: string;
+    postusername: string;
+    title: string;
+    slug: string;
+    body: string;
+  };
+
+  const [postList, setPostList] = useState<postListProps[]>([]);
+
+  const axiosPrivate = useAxios();
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const getPosts = async () => {
+      try {
+        const res = await axiosPrivate.get("/post/userposts", {
+          signal: controller.signal,
+        });
+
+        setPostList(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getPosts();
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
+
 
   const {
     auth: { username, avatar },
@@ -31,64 +61,17 @@ const Profile = () => {
   const [search, setSearch] = useState(false);
 
   return (
-    <div className='max-w-[600px] mx-auto min-h-screen relative flex flex-col'>
-      <div className='sticky top-0 py-4 z-20 flex md:hidden max-w-[200px] px-5 self-end'>
-        <Menu as='div' className='relative '>
-          <div>
-            <Menu.Button className=' inline-flex self-end w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100'>
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                strokeWidth={1.5}
-                stroke='currentColor'
-                className='w-6 h-6'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5'
-                />
-              </svg>
-            </Menu.Button>
-          </div>
-
-          <Transition
-            as={Fragment}
-            enter='transition ease-out duration-100'
-            enterFrom='transform opacity-0 scale-95'
-            enterTo='transform opacity-100 scale-100'
-            leave='transition ease-in duration-75'
-            leaveFrom='transform opacity-100 scale-100'
-            leaveTo='transform opacity-0 scale-95'
-          >
-            <Menu.Items className='absolute right-[-30px] z-10 mt-2 w-[150px] origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none px-3'>
-              {menuItems.map((item, index) => (
-                <div className='py-1' key={index}>
-                  <Menu.Item>
-                    <Link to={item.link}>{item.menuName}</Link>
-                  </Menu.Item>
-                </div>
-              ))}
-              <div className='py-1 w-full'>
-                <Menu.Item>
-                  <button onClick={() => logout()}>Logout</button>
-                </Menu.Item>
-              </div>
-            </Menu.Items>
-          </Transition>
-        </Menu>
-      </div>
+    <div className='max-w-[950px] mx-auto min-h-screen relative flex flex-col'>
       <section className='pt-40 '>
         <div className='w-full px-4 mx-auto'>
-          <div className='relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16'>
+          <div className='relative flex flex-col min-w-0 break-words bg-slate-900 w-full mb-6 shadow-xl rounded-lg mt-16'>
             <div>
               <div className='flex flex-wrap justify-center'>
                 <div className='w-full py-10 px-4 flex justify-center border-b border-b-blue-500 rounded-b-xl'>
-                  <div className='bg-gradient-to-r from-cyan-500 to-blue-500 absolute top-[-200px] w-full h-[10%] z-0 border-t rounded-t-xl' />
+                  <div className='bg-gradient-to-r from-cyan-500 to-blue-500 absolute top-[-200px] w-full h-[140px] z-0 border-t rounded-t-xl' />
                   <div className='relative flex flex-col items-center z-10 '>
                     <img
-                      className='w-32 h-32 mx-auto object-cover rounded-full -mt-20 border-8 border-slate-300 bg-slate-400 shadow-inner '
+                      className='absolute top-[-100px] w-32 h-32 mx-auto object-cover rounded-full -mt-20 border-8 border-slate-300 bg-slate-400 shadow-inner '
                       src={avatar}
                       alt='avatar'
                     />
@@ -135,7 +118,7 @@ const Profile = () => {
               <div className='mt-3 py-10 text-center'>
                 <div className='flex flex-wrap justify-center'>
                   <div className='w-full lg:w-9/12 px-4'>
-                    <p className='mb-4 text-lg leading-relaxed text-blueGray-700'>
+                    <p className='mb-4 text-sm sm:text-md md:text-lg  leading-relaxed text-blueGray-700 '>
                       An artist of considerable range, Jenna the name taken by
                       Melbourne-raised, Brooklyn-based Nick Murphy writes,
                       performs and records all of his own music, giving it a
@@ -147,7 +130,9 @@ const Profile = () => {
               </div>
 
               <div className=''>
-                <h1 className='text-center text-4xl my-10'>Posts</h1>
+                <h1 className='text-center text-lg sm:text-2xl md:text-4xl my-10 text-slate-500'>
+                  Your Posts
+                </h1>
                 <div className='flex flex-row items-center justify-around gap-4 my-10 '>
                   <Link to='/post' className='group flex relative'>
                     <span className='group-hover:opacity-100 transition-opacity bg-gray-800 px-1 text-sm text-gray-100 rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 m-4 mx-auto'>
@@ -204,8 +189,18 @@ const Profile = () => {
                     </label>
                   </div>
                 </div>
-                <div className=' grid grid-cols-card-container gap-y-5 py-20 place-items-center'>
-                  <Card />
+
+                <div className=' grid grid-cols-1 gap-y-5 py-20 place-items-center '>
+                  {postList.map(({ user, slug, title, postusername }) => (
+                    <div key={slug}>
+                      <Card
+                        user={user}
+                        slug={slug}
+                        title={title}
+                        postusername={postusername}
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -216,4 +211,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default AuthUserProfile;
